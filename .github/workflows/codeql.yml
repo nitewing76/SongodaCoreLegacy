@@ -1,0 +1,42 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [ master, development ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master, development ]
+  schedule:
+    - cron: 30 18 * * 4
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  Analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java
+
+      - name: Prepare Workspace
+        uses: ./.github/actions/setup_project_workspace
+        with:
+          spigot_buildtools_sftp_host: ${{ secrets.SPIGOT_BUILDTOOLS_SFTP_HOST }}
+          spigot_buildtools_sftp_port: ${{ vars.SPIGOT_BUILDTOOLS_SFTP_PORT }}
+          spigot_buildtools_sftp_user: ${{ secrets.SPIGOT_BUILDTOOLS_SFTP_USER }}
+          spigot_buildtools_sftp_private_key: ${{ secrets.SPIGOT_BUILDTOOLS_SFTP_PRIVATE_KEY }}
+          spigot_buildtools_sftp_host_key: ${{ secrets.SPIGOT_BUILDTOOLS_SFTP_HOST_KEY }}
+
+      - name: Build with Maven
+        run: mvn -B -DskipTests clean package
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3

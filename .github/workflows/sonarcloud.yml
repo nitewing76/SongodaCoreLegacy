@@ -1,0 +1,48 @@
+name: SonarCloud
+
+on:
+  push:
+    branches: [ master, development ]
+  workflow_dispatch:
+
+permissions: read-all
+
+env:
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  SONAR_ORGANIZATION: songoda
+  SONAR_PROJECT_KEY: songoda_SongodaCore
+
+jobs:
+  Analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Prepare Workspace
+        uses: ./.github/actions/setup_project_workspace
+        with:
+          spigot_buildtools_sftp_host: ${{ secrets.SPIGOT_BUILDTOOLS_SFTP_HOST }}
+          spigot_buildtools_sftp_port: ${{ vars.SPIGOT_BUILDTOOLS_SFTP_PORT }}
+          spigot_buildtools_sftp_user: ${{ secrets.SPIGOT_BUILDTOOLS_SFTP_USER }}
+          spigot_buildtools_sftp_private_key: ${{ secrets.SPIGOT_BUILDTOOLS_SFTP_PRIVATE_KEY }}
+          spigot_buildtools_sftp_host_key: ${{ secrets.SPIGOT_BUILDTOOLS_SFTP_HOST_KEY }}
+
+      - name: 'Cache: SonarCloud'
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
+      - name: Analyze project
+        run: >
+          mvn -B \
+            verify \
+            org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.host.url=https://sonarcloud.io \
+            "-Dsonar.organization=$SONAR_ORGANIZATION" \
+            "-Dsonar.projectKey=$SONAR_PROJECT_KEY"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.songoda</groupId>
+    <artifactId>SongodaCore-Modules</artifactId>
+    <version>3.9.2-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <!-- Run 'mvn versions:set -DgenerateBackupPoms=false -DnewVersion=X.Y.Z' to update version recursively -->
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <java.release>8</java.release>
+
+        <sonar.junit.reportPaths>target/surefire-reports/*.xml</sonar.junit.reportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    </properties>
+
+    <modules>
+        <module>Core</module>
+        <module>Compatibility</module>
+
+        <module>NMS/NMS</module>
+        <module>NMS/NMS-API</module>
+        <module>NMS/NMS-v1_21_R4</module>
+        <module>NMS/NMS-v1_21_R3</module>
+        <module>NMS/NMS-v1_21_R2</module>
+        <module>NMS/NMS-v1_21_R1</module>
+        <module>NMS/NMS-v1_20_R4</module>
+        <module>NMS/NMS-v1_20_R3</module>
+        <module>NMS/NMS-v1_20_R2</module>
+        <module>NMS/NMS-v1_20_R1</module>
+        <module>NMS/NMS-v1_19_R3</module>
+        <module>NMS/NMS-v1_19_R2</module>
+        <module>NMS/NMS-v1_19_R1</module>
+        <module>NMS/NMS-v1_19_0</module>
+        <module>NMS/NMS-v1_18_R2</module>
+        <module>NMS/NMS-v1_18_R1</module>
+        <module>NMS/NMS-v1_17_R1</module>
+        <module>NMS/NMS-v1_16_R3</module>
+        <module>NMS/NMS-v1_16_R2</module>
+        <module>NMS/NMS-v1_16_R1</module>
+        <module>NMS/NMS-v1_15_R1</module>
+        <module>NMS/NMS-v1_14_R1</module>
+        <module>NMS/NMS-v1_13_R2</module>
+        <module>NMS/NMS-v1_13_R1</module>
+        <module>NMS/NMS-v1_12_R1</module>
+        <module>NMS/NMS-v1_11_R1</module>
+        <module>NMS/NMS-v1_10_R1</module>
+        <module>NMS/NMS-v1_9_R2</module>
+        <module>NMS/NMS-v1_9_R1</module>
+        <module>NMS/NMS-v1_8_R3</module>
+        <module>NMS/NMS-v1_8_R2</module>
+        <module>NMS/NMS-v1_8_R1</module>
+    </modules>
+
+    <issueManagement>
+        <url>https://github.com/Songoda-Plugins/SongodaCore/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <scm>
+        <url>https://github.com/Songoda-Plugins/SongodaCore</url>
+        <connection>scm:git:git://github.com/Songoda-Plugins/SongodaCore.git</connection>
+    </scm>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+
+                    <release>${java.release}</release>
+                </configuration>
+            </plugin>
+
+            <!-- Plugins required for tests or coverage reports -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+
+                <configuration>
+                    <environmentVariables>
+                        <TESTS_RUN_WITH_MAVEN>true</TESTS_RUN_WITH_MAVEN>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.2.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
+
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>default-report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>songoda-minecraft-plugins</id>
+            <url>https://repo.songoda.com/repository/minecraft-plugins/</url>
+        </repository>
+
+        <repository>
+            <id>SpigotMC</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+
+        <repository>
+            <id>CodeMC</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
+        </repository>
+
+        <repository>
+            <id>bg-software</id>
+            <url>https://repo.bg-software.com/repository/api/</url>
+        </repository>
+
+        <repository>
+            <id>PaperMC</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io/</url>
+        </repository>
+
+        <repository>
+            <id>enginehub-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
+
+        <repository>
+            <id>neetgames-repo</id>
+            <url>https://nexus.neetgames.com/repository/maven-releases/</url>
+        </repository>
+
+        <repository>
+            <id>songoda-public</id>
+            <url>https://repo.songoda.com/repository/public/</url>
+        </repository>
+
+        <repository>
+            <id>songoda-third-party</id>
+            <url>https://repo.songoda.com/repository/third-party/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.12.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>4.11.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- bytebuddy is used by mockito; We are declaring a newer version for Java 21 support (remove if mockito supports Java 21) -->
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.14.14</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
